@@ -58,7 +58,7 @@ export function EnergyChart() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900">Energy Consumption</h2>
-          <p className="text-sm text-gray-500 mt-1">24-hour forecast and actual usage</p>
+          <p className="text-sm text-gray-500 mt-1">1-hour forecast and actual usage</p>
         </div>
         <div className="text-blue-600 bg-blue-50 p-3 rounded-lg">
           <Zap size={24} />
