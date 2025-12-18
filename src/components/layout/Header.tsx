@@ -1,4 +1,4 @@
-import { Home, Settings, Bell } from 'lucide-react';
+import { Home } from 'lucide-react';
 
 export function Header() {
   return (
@@ -15,14 +15,7 @@ export function Header() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-              <Bell size={20} />
-            </button>
-            <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-              <Settings size={20} />
-            </button>
-          </div>
+         
         </div>
       </div>
     </header>
