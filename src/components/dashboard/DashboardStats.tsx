@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StatCard } from '../ui/Card';
 import { apiService } from '../../services/api';
 import type { DashboardStats } from '../../types';
-import { Zap, Power, Activity, DollarSign } from 'lucide-react';
+import { Zap, Power, Activity } from 'lucide-react';
 
 export function DashboardStatsSection() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -27,8 +27,8 @@ export function DashboardStatsSection() {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map(i => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map(i => (
           <div key={i} className="bg-gray-100 rounded-xl h-36 animate-pulse" />
         ))}
       </div>
@@ -38,26 +38,28 @@ export function DashboardStatsSection() {
   if (!stats) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <StatCard
         title="Total Devices"
         value={stats.totalDevices}
         subtitle={`${stats.activeDevices} active`}
         icon={<Power size={24} />}
       />
+
       <StatCard
         title="Active Devices"
         value={stats.activeDevices}
-        subtitle={`${Math.round((stats.activeDevices / stats.totalDevices) * 100)}% of total`}
+        subtitle={`${Math.round(
+          (stats.activeDevices / stats.totalDevices) * 100
+        )}% of total`}
         icon={<Activity size={24} />}
       />
+
       <StatCard
         title="Energy Usage"
         value={`${stats.totalEnergy.toFixed(2)} kW`}
         subtitle="Current consumption"
         icon={<Zap size={24} />}
-      />
-      
       />
     </div>
   );
