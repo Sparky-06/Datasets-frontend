@@ -31,15 +31,6 @@ export function DevicesGrid() {
     }
   };
 
-  const handleUpdate = async (deviceId: string, updates: Partial<Device>) => {
-    try {
-      const updatedDevice = await apiService.updateDevice(deviceId, updates);
-      setDevices(devices.map(d => (d.id === deviceId ? updatedDevice : d)));
-    } catch (error) {
-      console.error('Failed to update device:', error);
-    }
-  };
-
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -50,11 +41,14 @@ export function DevicesGrid() {
     );
   }
 
- 
+  // ✅ WORKING FILTER (matches your API + DeviceCard)
   const filteredDevices = devices.filter(device =>
-    (device.name === 'Living Room Light' && device.room === 'Living Room') ||
-    (device.name === 'Main AC' && device.room === 'Living Room') ||
-    (device.name === 'Ceiling Fan' && device.room === 'Bedroom')
+    // Living Room: Light + AC
+    (device.location === 'Living Room' &&
+      (device.type === 'light' || device.type === 'ac')) ||
+
+    // Bedroom: Fan only
+    (device.location === 'Bedroom' && device.type === 'fan')
   );
 
   return (
@@ -64,7 +58,7 @@ export function DevicesGrid() {
           key={device.id}
           device={device}
           onToggle={handleToggle}
-          onUpdate={handleUpdate}
+          onUpdate={() => {}}
         />
       ))}
     </div>
