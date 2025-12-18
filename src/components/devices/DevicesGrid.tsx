@@ -25,7 +25,7 @@ export function DevicesGrid() {
   const handleToggle = async (deviceId: string) => {
     try {
       const updatedDevice = await apiService.toggleDevice(deviceId);
-      setDevices(devices.map(d => d.id === deviceId ? updatedDevice : d));
+      setDevices(devices.map(d => (d.id === deviceId ? updatedDevice : d)));
     } catch (error) {
       console.error('Failed to toggle device:', error);
     }
@@ -34,7 +34,7 @@ export function DevicesGrid() {
   const handleUpdate = async (deviceId: string, updates: Partial<Device>) => {
     try {
       const updatedDevice = await apiService.updateDevice(deviceId, updates);
-      setDevices(devices.map(d => d.id === deviceId ? updatedDevice : d));
+      setDevices(devices.map(d => (d.id === deviceId ? updatedDevice : d)));
     } catch (error) {
       console.error('Failed to update device:', error);
     }
@@ -43,16 +43,23 @@ export function DevicesGrid() {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3, 4, 5, 6].map(i => (
+        {[1, 2, 3].map(i => (
           <div key={i} className="bg-gray-100 rounded-xl h-64 animate-pulse" />
         ))}
       </div>
     );
   }
 
+ 
+  const filteredDevices = devices.filter(device =>
+    (device.name === 'Living Room Light' && device.room === 'Living Room') ||
+    (device.name === 'Main AC' && device.room === 'Living Room') ||
+    (device.name === 'Ceiling Fan' && device.room === 'Bedroom')
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {devices.map(device => (
+      {filteredDevices.map(device => (
         <DeviceCard
           key={device.id}
           device={device}
