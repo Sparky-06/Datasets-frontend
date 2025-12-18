@@ -1,4 +1,4 @@
-import { Thermometer, Droplets, Users } from 'lucide-react';
+import { Thermometer, Droplets } from 'lucide-react';
 import { Card } from '../ui/Card';
 import type { Sensor } from '../../types';
 
@@ -13,8 +13,8 @@ export function SensorCard({ sensor }: SensorCardProps) {
         return <Thermometer size={24} />;
       case 'humidity':
         return <Droplets size={24} />;
-      case 'occupancy':
-        return <Users size={24} />;
+      default:
+        return null;
     }
   };
 
@@ -26,6 +26,8 @@ export function SensorCard({ sensor }: SensorCardProps) {
         return 'bg-yellow-100 text-yellow-800';
       case 'critical':
         return 'bg-red-100 text-red-800';
+      default:
+        return '';
     }
   };
 
@@ -35,15 +37,12 @@ export function SensorCard({ sensor }: SensorCardProps) {
         return 'text-orange-500';
       case 'humidity':
         return 'text-blue-500';
-      case 'occupancy':
-        return 'text-green-500';
+      default:
+        return '';
     }
   };
 
   const formatValue = () => {
-    if (sensor.type === 'occupancy') {
-      return sensor.value === 0 ? 'Empty' : `${sensor.value} ${sensor.unit}${sensor.value > 1 ? 's' : ''}`;
-    }
     return `${sensor.value}${sensor.unit}`;
   };
 
@@ -55,7 +54,10 @@ export function SensorCard({ sensor }: SensorCardProps) {
 
     if (minutes < 1) return 'Just now';
     if (minutes < 60) return `${minutes}m ago`;
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   return (
@@ -66,19 +68,27 @@ export function SensorCard({ sensor }: SensorCardProps) {
             {getIcon()}
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 capitalize">{sensor.type}</h3>
+            <h3 className="font-semibold text-gray-900 capitalize">
+              {sensor.type}
+            </h3>
             <p className="text-sm text-gray-500">{sensor.location}</p>
           </div>
         </div>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor()}`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor()}`}
+        >
           {sensor.status}
         </span>
       </div>
 
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-3xl font-bold text-gray-900">{formatValue()}</p>
-          <p className="text-xs text-gray-500 mt-1">Updated {formatTimestamp()}</p>
+          <p className="text-3xl font-bold text-gray-900">
+            {formatValue()}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Updated {formatTimestamp()}
+          </p>
         </div>
       </div>
     </Card>
