@@ -57,11 +57,7 @@ export function DashboardStatsSection() {
         subtitle="Current consumption"
         icon={<Zap size={24} />}
       />
-      <StatCard
-        title="Estimated Cost"
-        value={`$${stats.estimatedCost.toFixed(2)}`}
-        subtitle="Per hour"
-        icon={<DollarSign size={24} />}
+      
       />
     </div>
   );
