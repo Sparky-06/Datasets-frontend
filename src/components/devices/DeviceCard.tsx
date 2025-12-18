@@ -6,7 +6,6 @@ import type { Device } from '../../types';
 interface DeviceCardProps {
   device: Device;
   onToggle: (deviceId: string) => void;
-  onUpdate: (deviceId: string, updates: Partial<Device>) => void;
 }
 
 export function DeviceCard({ device, onToggle }: DeviceCardProps) {
@@ -72,3 +71,4 @@ export function DeviceCard({ device, onToggle }: DeviceCardProps) {
     </Card>
   );
 }
+
