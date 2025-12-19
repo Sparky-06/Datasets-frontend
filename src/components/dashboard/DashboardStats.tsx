@@ -1,25 +1,33 @@
 import { useEffect, useState } from 'react';
 import { StatCard } from '../ui/Card';
 import { apiService } from '../../services/api';
-import type { DashboardStats } from '../../types';
+import type { Device } from '../../types';
 import { Zap, Power, Activity } from 'lucide-react';
 
 export function DashboardStatsSection() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [devices, setDevices] = useState<Device[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadStats();
-    const interval = setInterval(loadStats, 30000);
+    loadDevices();
+    const interval = setInterval(loadDevices, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const loadStats = async () => {
+  const loadDevices = async () => {
     try {
-      const data = await apiService.getDashboardStats();
-      setStats(data);
+      const data = await apiService.getDevices();
+
+      // ✅ KEEP ONLY THE 3 DEVICES YOU SHOW
+      const filtered = data.filter(device =>
+        (device.name === 'Living Room Light' && device.location === 'Living Room') ||
+        (device.name === 'Main AC' && device.location === 'Living Room') ||
+        (device.name === 'Ceiling Fan' && device.location === 'Bedroom')
+      );
+
+      setDevices(filtered);
     } catch (error) {
-      console.error('Failed to load dashboard stats:', error);
+      console.error('Failed to load devices:', error);
     } finally {
       setLoading(false);
     }
@@ -35,29 +43,34 @@ export function DashboardStatsSection() {
     );
   }
 
-  if (!stats) return null;
+  // ✅ DERIVE STATS FROM FILTERED DEVICES
+  const totalDevices = devices.length;
+  const activeDevices = devices.filter(d => d.status === 'on').length;
+  const totalEnergy = devices.reduce((sum, d) => sum + d.powerUsage, 0);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <StatCard
         title="Total Devices"
-        value={stats.totalDevices}
-        subtitle={`${stats.activeDevices} active`}
+        value={totalDevices}
+        subtitle={`${activeDevices} active`}
         icon={<Power size={24} />}
       />
 
       <StatCard
         title="Active Devices"
-        value={stats.activeDevices}
-        subtitle={`${Math.round(
-          (stats.activeDevices / stats.totalDevices) * 100
-        )}% of total`}
+        value={activeDevices}
+        subtitle={
+          totalDevices > 0
+            ? `${Math.round((activeDevices / totalDevices) * 100)}% of total`
+            : '0%'
+        }
         icon={<Activity size={24} />}
       />
 
       <StatCard
         title="Energy Usage"
-        value={`${stats.totalEnergy.toFixed(2)} kW`}
+        value={`${totalEnergy.toFixed(0)} W`}
         subtitle="Current consumption"
         icon={<Zap size={24} />}
       />
