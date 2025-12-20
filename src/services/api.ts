@@ -1,6 +1,6 @@
 import type { Device, Sensor, EnergyData, AutomationRule, DashboardStats } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://smart-home-backend.onrender.com/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://datasets-backend.onrender.com/api';
 
 const mockDevices: Device[] = [
   { id: '1', name: 'Living Room Light', type: 'light', status: 'on', location: 'Living Room', powerUsage: 15, brightness: 80 },
